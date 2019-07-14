@@ -6,4 +6,11 @@ Rails.application.routes.draw do
       post 'withdraw' => 'wallets#withdraw', on: :collection, as: :withdraw
     end
   end
+
+  resources :groups, only: :create do
+    resources :wallets do
+      post 'deposit' => 'wallets#deposit', on: :collection, as: :deposit
+      post 'withdraw' => 'wallets#withdraw', on: :collection, as: :withdraw
+    end
+  end
 end
