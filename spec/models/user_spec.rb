@@ -6,7 +6,7 @@ RSpec.describe User, type: :model do
 
   it { should validate_presence_of(:phone_number) }
 
-  it { should have_one(:wallet) }
+  it { should have_many(:wallets) }
 
   describe 'create' do
     it 'should create a new user' do

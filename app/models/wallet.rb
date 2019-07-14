@@ -1,5 +1,5 @@
 class Wallet < ApplicationRecord
-
+  belongs_to :walletable, polymorphic: true
   validates_presence_of :balance_in_paise
 
   def deposit(deposit_amount)

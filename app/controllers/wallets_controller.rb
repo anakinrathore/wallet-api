@@ -3,7 +3,7 @@ class WalletsController < ApplicationController
   def create
     @user = User.find_by_id(params[:user_id])
     if @user
-      @user.wallet = Wallet.create(balance_in_paise: params[:balance_in_paise])
+      @wallet = @user.wallets.create(balance_in_paise: params[:balance_in_paise])
       render_wallet_created_success_message
     else
       render_user_not_found_message
@@ -12,9 +12,10 @@ class WalletsController < ApplicationController
 
   def deposit
     @user = User.find_by_id(params[:user_id])
-    if @user
-      if @user.wallet.present?
-        @user.wallet.deposit(params[:deposit_amount])
+    if @user.present?
+      @wallet = @user.wallets.find_by_id(params[:wallet_id])
+      if @wallet.present?
+        @wallet.deposit(params[:deposit_amount])
         render_wallet_updated_message
       else
         render_wallet_not_found_message
@@ -27,8 +28,9 @@ class WalletsController < ApplicationController
   def withdraw
     @user = User.find_by_id(params[:user_id])
     if @user
-      if @user.wallet.present?
-        @user.wallet.withdraw(params[:withdrawl_amount])
+      @wallet = @user.wallets.find_by_id(params[:wallet_id])
+      if @wallet.present?
+        @wallet.withdraw(params[:withdrawl_amount])
         render_wallet_updated_message
       else
         render_wallet_not_found_message
@@ -43,11 +45,11 @@ class WalletsController < ApplicationController
   end
 
   def render_wallet_created_success_message
-    render json: @user.wallet, status: :created
+    render json: @wallet, status: :created
   end
 
   def render_wallet_updated_message
-    render json: @user.wallet, status: 200
+    render json: @wallet, status: 200
   end
 
   def render_wallet_not_found_message

@@ -9,5 +9,7 @@ FactoryBot.define do
 
   factory :wallet do
     balance_in_paise          { SecureRandom.random_number(100000) }
+    walletable_id             { SecureRandom.uuid }
+    walletable_type          { "User" }
   end
 end
