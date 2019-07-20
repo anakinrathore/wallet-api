@@ -35,6 +35,22 @@ class WalletsController < ApplicationController
     end
   end
 
+  def deposit_shared
+    @user = User.find_by_id(params[:user_id])
+    @group = @user.groups.find_by_id(params[:group_id]) if @user.present?
+    if @group && @user
+      @wallet = @group.wallets.find_by_id(params[:wallet_id])
+      if @wallet.present?
+        @wallet.deposit(params[:deposit_amount])
+        render_wallet_updated_message
+      else
+        render_wallet_not_found_message
+      end
+    else
+      render json:{ "success": false, "errors": "Group or User with id: #{params[:group_id]} not found" }, status: :bad_request
+    end
+  end
+
   def withdraw
     @user = User.find_by_id(params[:user_id])
     if @user
@@ -47,6 +63,22 @@ class WalletsController < ApplicationController
       end
     else
       render_user_not_found_message
+    end
+  end
+
+  def withdraw_shared
+    @user = User.find_by_id(params[:user_id])
+    @group = @user.groups.find_by_id(params[:group_id]) if @user.present?
+    if @user && @group
+      @wallet = @group.wallets.find_by_id(params[:wallet_id])
+      if @wallet
+        @wallet.withdraw(params[:withdrawl_amount])
+        render_wallet_updated_message
+      else
+        render_wallet_not_found_message
+      end
+    else
+      render json:{ "success": false, "errors": "Group or User not found" }, status: :bad_request
     end
   end
 

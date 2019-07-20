@@ -8,6 +8,8 @@ RSpec.describe User, type: :model do
 
   it { should have_many(:wallets) }
 
+  it { should have_and_belong_to_many(:groups) }
+
   describe 'create' do
     it 'should create a new user' do
       user = create(:user)

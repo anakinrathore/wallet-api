@@ -6,7 +6,7 @@ RSpec.describe Group, type: :model do
 
   it { should have_many(:wallets) }
 
-  it { should have_many(:users) }
+  it { should have_and_belong_to_many(:users) }
 
   describe 'create' do
     it 'should create a new group' do

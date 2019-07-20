@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_14_110545) do
+ActiveRecord::Schema.define(version: 2019_07_20_092805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -22,6 +22,12 @@ ActiveRecord::Schema.define(version: 2019_07_14_110545) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "groups_users", id: false, force: :cascade do |t|
+    t.uuid "group_id", null: false
+    t.uuid "user_id", null: false
+    t.index ["group_id", "user_id"], name: "index_groups_users_on_group_id_and_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -29,8 +35,6 @@ ActiveRecord::Schema.define(version: 2019_07_14_110545) do
     t.string "phone_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "group_id"
-    t.index ["group_id"], name: "index_users_on_group_id"
   end
 
   create_table "wallets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
