@@ -10,6 +10,16 @@ class WalletsController < ApplicationController
     end
   end
 
+  def create_shared
+    @group = Group.find_by_id(params[:group_id])
+    if @group
+      @wallet = @group.wallets.create(balance_in_paise: params[:balance_in_paise])
+      render_wallet_created_success_message
+    else
+      render_group_not_found_message
+    end
+  end
+
   def deposit
     @user = User.find_by_id(params[:user_id])
     if @user.present?
@@ -42,6 +52,10 @@ class WalletsController < ApplicationController
 
   def render_user_not_found_message
     render json:{ "success": false, "errors": "User with id: #{params[:user_id]} not found" }, status: :bad_request
+  end
+
+  def render_group_not_found_message
+    render json:{ "success": false, "errors": "Group with id: #{params[:group_id]} not found" }, status: :bad_request
   end
 
   def render_wallet_created_success_message
